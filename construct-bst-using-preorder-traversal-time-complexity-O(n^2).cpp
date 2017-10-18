@@ -107,3 +107,5 @@ int main()
     tree.inOrder(root);
     return 0;
 }
+
+// Input: 10 5 1 7 40 50
