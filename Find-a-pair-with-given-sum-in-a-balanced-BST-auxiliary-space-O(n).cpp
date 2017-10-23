@@ -18,20 +18,6 @@ class Node
         }    
 };
 
-class TNode
-{
-    public:
-        bool isBST;
-        int size, min, max;
-    
-        TNode(bool isBST, int size, int min, int max)
-        {
-            this->isBST = isBST;
-            this->size = size;
-            this->min = min;
-            this->max = max;
-        }
-};
 
 // properties and methods of tree
 class Tree
