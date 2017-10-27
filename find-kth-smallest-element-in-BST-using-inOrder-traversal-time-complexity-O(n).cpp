@@ -1,4 +1,4 @@
-// find the kth smallest element in a binary search tree. Using inOrder traversal. No auxiliary space. Time complexity: O(n)
+// find the kth smallest element in a binary search tree by doing inOrder traversal. No auxiliary space. Time complexity: O(n)
 
 #include <bits/stdc++.h>
 
