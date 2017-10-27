@@ -128,6 +128,6 @@ int main()
     return 0;
 }
 
-// Inputs: 
-9 4
+// Input: 
+9 5
 20 8 22 4 12 10 14 21 24
