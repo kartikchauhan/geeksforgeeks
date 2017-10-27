@@ -1,4 +1,4 @@
-// find the kth largest element in a binary search tree
+// find the kth smallest element in a binary search tree. No augmentation.
 
 #include <bits/stdc++.h>
 
@@ -38,11 +38,22 @@ class BinaryTree
             this->inOrder(root->right);
         }
     
-        Node *kthLargest(Node *root)
+        Node *kthSmallest(Node *root, int k)
         {
-            if(root == NULL)
+            int numLeftChildren = numNodes(root->left);
+            if(numLeftChildren+1 == k)
+            {
                 return root;
-            if(numLeftChildren(root))
+            }
+            else if(numLeftChildren >= k)
+            {
+                return kthSmallest(root->left, k);
+            }
+            else if(numLeftChildren < k)
+            {
+                return kthSmallest(root->right, k-(numLeftChildren+1));
+            }
+            return root;    // hackerrank's return type constraint
         }
 
     private:
@@ -67,6 +78,9 @@ class BinaryTree
     
         int numNodes(Node *root) 
         {
+            if(root == NULL)
+                return 0;
+            
             queue<Node *> q;
             q.push(root);
             int sum = 0;
@@ -76,16 +90,16 @@ class BinaryTree
                 int q_size = q.size();
                 while(q_size--)
                 {
-                    node *curr = q.front();
+                    Node *curr = q.front();
                     q.pop();
-                    summ++;
+                    sum++;
                     if(curr->left)
                         q.push(curr->left);
                     if(curr->right)
                         q.push(curr->right);
                 }
             } 
-            return summ;
+            return sum;
         }
 };
 
@@ -93,8 +107,7 @@ int main()
 {
     int num, k;
     cin >> num >> k;
-    // Node root;
-    // root = NULL;
+
     Node *root = NULL;
     BinaryTree bt;
 
@@ -111,5 +124,11 @@ int main()
             bt.insert(root, data);
         }        
     }    
+    
+    cout << bt.kthSmallest(root, k)->data;
     return 0;
 }
+
+// Input: 
+9 5
+20 8 22 4 12 10 14 21 24
