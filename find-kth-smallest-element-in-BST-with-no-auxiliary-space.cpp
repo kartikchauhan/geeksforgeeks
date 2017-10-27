@@ -1,4 +1,4 @@
-// find the kth smallest element in a binary search tree. No augmentation.
+// find the kth smallest element in a binary search tree. No auxiliary space.
 
 #include <bits/stdc++.h>
 
