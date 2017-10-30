@@ -1,4 +1,4 @@
-// print all permutations of a given string in lexicographical order with repetition of characters allowed.
+// print all permutations of a given string in lexicographical order with no repetition of characters.
 
 #include <iostream>
 #include <vector>
@@ -61,12 +61,12 @@ int main()
 	    
     for(int i=0; i<sLength; i++)
     {
-    	set[s[i]]++;
+    	set[s[i]] = 1;
     }
 
     int setSize = set.size();
 
-    vector<char> str(setSize), result(sLength);	// could've used setSize instead of str or count.
+    vector<char> str(setSize), result(setSize);	// could've used setSize instead of str or count.
     vector<int> count(setSize);
 
     getUniqueChars(set, str, count);	// get all the distinct characters from the given string so that we could perform permutations on it.
