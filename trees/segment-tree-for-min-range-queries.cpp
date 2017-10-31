@@ -47,7 +47,9 @@ void creation(vector<int> &segmentTreeArr, vector<int> &original, int low, int h
 
 int findMin(vector<int> &segmentTreeArr, vector<int> &original, int qlow, int qhigh, int low, int high, int pos)
 {
-	if(qlow <= low && qhigh >= high)
+	if(low == high)
+		return segmentTreeArr[pos];
+	else if(qlow <= low && qhigh >= high)
 		return segmentTreeArr[pos];
 	else if(qlow > high || qhigh < low)
 		return numeric_limits<int>::max();
