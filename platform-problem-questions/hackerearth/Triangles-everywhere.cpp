@@ -1,3 +1,6 @@
+// Triangles everywhere
+// https://www.hackerearth.com/challenge/competitive/november-circuits-17/algorithm/triangles-everywhere-86722cb7/
+
 #include <bits/stdc++.h>
 #define lli long long int
 using namespace std;
