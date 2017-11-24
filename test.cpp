@@ -1,147 +1,245 @@
-#include <bits/stdc++.h>
-#define lli long long int
+#include <iostream>
+#include <vector>
 using namespace std;
-
-lli stringToNumber(string s)
-{
-    lli length = s.length();
-    lli result = 0;
-    for(lli i=0; i<length; i++)
-        result = result * 10 + (s[i] - '0');
-
-    return result;
-}
-
-string multiply(string num1, string num2)
-{
-    lli n1 = num1.size();
-    lli n2 = num2.size();
-    if (n1 == 0 || n2 == 0)
-       return "0";
-
-    vector<lli> result(n1 + n2, 0);
- 
-    lli i_n1 = 0; 
-    lli i_n2 = 0; 
- 
-    for (lli i=n1-1; i>=0; i--)
-    {
-        lli carry = 0;
-        lli n1 = num1[i] - '0';
- 
-        i_n2 = 0; 
-         
-        for (lli j=n2-1; j>=0; j--)
-        {
-            lli n2 = num2[j] - '0';
-            lli sum = n1*n2 + result[i_n1 + i_n2] + carry;
-            carry = sum/10;
-            result[i_n1 + i_n2] = sum % 10;
-            i_n2++;
-        }
- 
-        if (carry > 0)
-            result[i_n1 + i_n2] += carry;
- 
-        i_n1++;
-    }
- 
-    lli i = result.size() - 1;
-    while (i>=0 && result[i] == 0)
-       i--;
- 
-    if (i == -1)
-       return "0";
- 
-    string s = "";
-    while (i >= 0)
-        s += std::to_string(result[i--]);
- 
-    return s;
-}
-
-string longDivision(string dividend, lli divisor)
-{
-
-    lli result = 0;
-    lli dividendSize = dividend.length();
-    bool flag = true;
-
-    for(lli i=0; i<dividendSize; i++)
-    {        
-        result = result * 10 + (dividend[i] - '0');
-        if(result > divisor)
-        {
-            flag = false;
-            break;
-        }
-    }
-
-    if(flag == true)
-    {
-        if(result == divisor)
-            return "0";
-        else
-            return dividend;
-    }
-
-
-    lli index = 0;
-    lli temp = dividend[index] - '0';   // get the first number from the dividend and convert it to llieger
-
-    // get the first number from the dividend part which is greater than divisor
-    while(temp < divisor)
-        temp = temp * 10 + (dividend[++index] - '0');     // getting the next number and appending it to temp
-
-    while(dividendSize > index)
-    {
-        index++;
-        if(dividendSize == index)
-            temp = temp % divisor;
-        else
-            temp = (temp % divisor) * 10 + dividend[index] - '0';
-    }
-
-    string finalResult = to_string(temp);
-
-    return finalResult;
-}
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    int n, m;
+    cin >> n >> m;
 
-    lli q, n;
-    cin >> q;
+    vector< vector<char> > num(n, vector<char>(m));
 
-    vector<lli> num;
-    num.push_back(1);
-    num.push_back(5);
-    lli index = 1;
-
-    string power = "1";
-    lli mod  = pow(10, 9) + 7;
-
-    while(q--)
+    for(int i=0; i<n; i++)
     {
-        cin >> n;
-        if(n <= index)
-            cout << num[n] << "\n";
-        else
-        {
-            for(index=index+1; index <=n; index++)
-            {
-                power = multiply(power, "3");
-                power = longDivision(power, mod);
-                string result = longDivision(power, mod);
-                lli anotherResult = stringToNumber(result);
-                anotherResult = ((((anotherResult % mod) * 4) % mod ) + (num[index-1] % mod)) % mod;
-                num.push_back(anotherResult);
-            }
-            index--;
-            cout << num[n] << "\n";
-        }
+        for(int j=0; j<m; j++)
+            cin >> num[i][j];
     }
+    
+    int sum = 0;
+
+    vector< vector<bool> > check(n, vector<bool>(m, false));
+
+    for(int i=0; i<n-1; i++)    
+    {
+        for(int j=0; j<m-1; j++)
+        {
+            vector<int> count(4, 0);
+
+            bool flag = false;
+
+            if(check[i][j] || check[i][j+1] || check[i+1][j] || check[i+1][j+1])
+                flag = true;
+
+            count[num[i][j]-'a']++;
+            count[num[i+1][j]-'a']++;
+            count[num[i][j+1]-'a']++;
+            count[num[i+1][j+1]-'a']++;
+
+            for(int k=0; k<4; k++)
+            {
+                if(count[k] > 1)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+
+            if(!flag && num[i][j] == 'a')
+            {
+                if(num[i+1][j+1] == 'b')
+                    flag = true;
+            }
+            else if(!flag && num[i][j+1] == 'a')
+            {
+                if(num[i+1][j] == 'b')
+                    flag = true;
+            }
+            else if(!flag && num[i+1][j] == 'a')
+            {
+                if(num[i][j+1] == 'b')
+                    flag = true;
+            }
+            else if(!flag && num[i+1][j+1] == 'a')
+            {
+                if(num[i][j] == 'b')
+                    flag = true;
+            }
+
+            if(!flag && num[i][j] == 'b')
+            {
+                if(num[i+1][j+1] == 'c')
+                    flag = true;
+            }
+            else if(!flag && num[i][j+1] == 'b')
+            {
+                if(num[i+1][j] == 'c')
+                    flag = true;
+            }
+            else if(!flag && num[i+1][j] == 'b')
+            {
+                if(num[i][j+1] == 'c')
+                    flag = true;
+            }
+            else if(!flag && num[i+1][j+1] == 'b')
+            {
+                if(num[i][j] == 'c')
+                    flag = true;
+            }
+
+            if(!flag && num[i][j] == 'c')
+            {
+                if(num[i+1][j+1] == 'd')
+                    flag = true;
+            }
+            else if(!flag && num[i][j+1] == 'c')
+            {
+                if(num[i+1][j] == 'd')
+                    flag = true;
+            }
+            else if(!flag && num[i+1][j] == 'c')
+            {
+                if(num[i][j+1] == 'd')
+                    flag = true;
+            }
+            else if(!flag && num[i+1][j+1] == 'c')
+            {
+                if(num[i][j] == 'd')
+                    flag = true;
+            }
+
+            if(flag == false)
+            {
+                sum++;
+                check[i][j] = check[i][j+1] = check[i+1][j] = check[i+1][j+1] = true;
+            }
+
+
+        }
+
+    }
+
+    for(int i=0; i<n; i++)    
+    {
+        for(int j=0; j<m-3; j++)
+        {
+            vector<int> count(4, 0);
+
+            bool flag = false;
+
+            if(check[i][j] || check[i][j+1] || check[i][j+2] || check[i][j+3])
+                flag = true;
+            
+            count[num[i][j]-'a']++;
+            count[num[i][j+1]-'a']++;
+            count[num[i][j+2]-'a']++;
+            count[num[i][j+3]-'a']++;
+
+            for(int k=0; k<4; k++)
+            {
+                if(count[k] > 1)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+
+            if(!flag && num[i][j] == 'a')
+            {
+                if(num[i][j+1] == 'b')
+                    flag = false;
+                else
+                    flag = true;
+            }
+            else if(!flag && num[i][j+1] == 'a')
+            {
+                if(num[i][j] == 'b' || num[i][j+2] == 'b')
+                    flag = false;
+                else
+                    flag = true;
+            }
+            else if(!flag && num[i][j+2] == 'a')
+            {
+                if(num[i][j+1] == 'b' || num[i][j+3] == 'b')
+                    flag = false;
+                else
+                    flag = true;
+            }
+            else if(!flag && num[i][j+3] == 'a')
+            {
+                if(num[i][j+2] == 'b')
+                    flag = false;
+                else
+                    flag = true;
+            }
+
+            if(!flag && num[i][j] == 'b')
+            {
+                if(num[i][j+1] == 'c')
+                    flag = false;
+                else
+                    flag = true;
+            }
+            else if(!flag && num[i][j+1] == 'b')
+            {
+                if(num[i][j] == 'c' || num[i][j+2] == 'c')
+                    flag = false;
+                else
+                    flag = true;
+            }
+            else if(!flag && num[i][j+2] == 'b')
+            {
+                if(num[i][j+1] == 'c' || num[i][j+3] == 'c')
+                    flag = false;
+                else
+                    flag = true;
+            }
+            else if(!flag && num[i][j+3] == 'b')
+            {
+                if(num[i][j+2] == 'c')
+                    flag = false;
+                else
+                    flag = true;
+            }
+
+            if(!flag && num[i][j] == 'c')
+            {
+                if(num[i][j+1] == 'd')
+                    flag = false;
+                else
+                    flag = true;
+            }
+            else if(!flag && num[i][j+1] == 'c')
+            {
+                if(num[i][j] == 'd' || num[i][j+2] == 'd')
+                    flag = false;
+                else
+                    flag = true;
+            }
+            else if(!flag && num[i][j+2] == 'c')
+            {
+                if(num[i][j+1] == 'd' || num[i][j+3] == 'd')
+                    flag = false;
+                else
+                    flag = true;
+            }
+            else if(!flag && num[i][j+3] == 'c')
+            {
+                if(num[i][j+2] == 'd')
+                    flag = false;
+                else
+                    flag = true;
+            }
+    
+            if(flag == false)
+            {
+                sum++;
+                check[i][j] = check[i][j+1] = check[i][j+2] = check[i][j+3] = true;
+            }
+
+        }
+
+    }
+
+    cout << sum;
     return 0;
 }
