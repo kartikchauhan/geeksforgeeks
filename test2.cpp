@@ -1,48 +1,73 @@
-#include <iostream>
 #include <vector>
+#include <utility>
+#include <iostream>
 #include <algorithm>
-#define lli long long unsigned int
+
+#define lli long long int
 using namespace std;
+
+
+void minSwaps(vector<lli> num, vector< pair<lli, lli> > &swapsPeformed, lli &ans)
+{
+	lli n = num.size();
+
+    pair<lli, lli> arrPos[n];
+    for (lli i = 0; i < n; i++)
+    {
+        arrPos[i].first = num[i];
+        arrPos[i].second = i;
+    }
+ 
+    sort(arrPos, arrPos + n);
+
+    vector<bool> vis(n, false);
+ 
+    for (lli i = 0; i < n; i++)
+    {
+        if (vis[i] || arrPos[i].second == i)
+            continue;
+ 
+        lli cycle_size = 0;
+        lli j = i;
+        while (!vis[j])
+        {
+            vis[j] = 1;
+
+        	lli temp = j+1;
+            j = arrPos[j].second;
+            swapsPeformed.push_back(make_pair(temp, j+1));
+
+            cycle_size++;
+        }
+ 
+        ans += (cycle_size - 1);
+    }
+}
 
 int main()
 {
-	int n, k;
-	cin >> n >> k;
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
 
-	vector<lli> num(n);
+	lli n;
+	cin >> n;
 
-	for(int i=0; i<n; i++)
-		cin >> num[i];
+	vector<lli> a(n);
 
-	vector<lli> subset;
-
-	for(int i=0; i<n; i++)
-	{
-    	lli xorValue;
-
-		for(lli j=i; j<n; j++)
-		{
-			if(i == j)
-				subset.push_back(num[i]);
-			else if(j == i+1)
-			{
-				xorValue = num[i] xor num[j];
-				subset.push_back(xorValue);
-			}
-			else
-			{
-				xorValue = subset.back() xor num[j];
-				subset.push_back(xorValue);
-			}
-			
-		}
-	}
-
-	sort(subset.begin(), subset.end(), greater<lli>());
+	for(lli i=0; i<n; i++)
+		cin >> a[i];
 	
-	lli subsetsSize = subset.size();
+	lli swaps = 0;
 
-	cout << subset[k-1];
-    
+	vector< pair<lli, lli> > swapsPeformed;
+
+	minSwaps(a, swapsPeformed, swaps);
+
+	cout << swaps << endl;
+	
+	for(lli i=0; i<swaps; i++)
+		cout << swapsPeformed[i].first << " " << swapsPeformed[i].second << "\n";
+
+	
     return 0;
 }
