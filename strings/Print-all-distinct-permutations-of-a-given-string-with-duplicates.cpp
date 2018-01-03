@@ -1,3 +1,5 @@
+// Print all distinct permutations of a given string with duplicates
+
 #include <bits/stdc++.h>
 
 using namespace std;
