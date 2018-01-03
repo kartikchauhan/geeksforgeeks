@@ -1,3 +1,5 @@
+// print all permutations of string using next_permutation(permutations.h)
+
 #include <bits/stdc++.h>
 
 using namespace std;
