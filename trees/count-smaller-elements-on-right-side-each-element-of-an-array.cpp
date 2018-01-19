@@ -1,3 +1,5 @@
+// Count smaller elements on right side of each element of an array
+
 #include <stdio.h>
 #include <stdlib.h>
 #define lli long int
