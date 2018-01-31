@@ -1,3 +1,6 @@
+// array right rotation by d elements
+// make suitable modifications in rotateArrayRight function to make the program work for left rotation
+
 #include <bits/stdc++.h>
 
 using namespace std;
