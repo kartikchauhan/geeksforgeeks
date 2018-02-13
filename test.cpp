@@ -1,5 +1,3 @@
-// print all possible subsets of a set of n elements
-
 #include <bits/stdc++.h>
 
 using namespace std;
