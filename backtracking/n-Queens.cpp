@@ -1,5 +1,3 @@
-// The program might throw segmentation 
-
 #include <bits/stdc++.h>
 
 using namespace std;
