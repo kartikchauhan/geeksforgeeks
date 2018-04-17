@@ -1,78 +1,34 @@
-// check if there exists any subset whose elements adds up to given SUM and if it does then print its elements.
-
-// Here dynamic approach is used.
-// For more info: https://www.youtube.com/watch?v=s6FhG--P7z0
+// check whether a given set can be partitioned into two subsets such that the sum of elements in both subsets is same. Also print elements of the partitioned set.
 
 #include <bits/stdc++.h>
 
 using namespace std;
 
-void printPath(vector< vector<bool> > &subset, vector<int> set, int row, int col)
+bool partition(vector<int> &input, vector<int> &output, int n, int sum, int &sumInpartition)
 {
-    if(row == 0)
-    {
-        if(subset[row][col])
-            cout << set[row] << endl;
-        return;
-    }
+    if(sum == 0)
+        return true;
+    if(n == 0 and sum != 0)
+        return false;
 
-    if(subset[row-1][col])
+    if(input[n-1] > sum)
+        return partition(input, output, n-1, sum, sumInpartition);
+
+    bool result = (partition(input, output, n-1, sum, sumInpartition) || partition(input, output, n-1, sum-input[n-1], sumInpartition));
+    if(result)
     {
-        printPath(subset, set, row-1, col);
+        if(sumInpartition != sum)
+        {            
+            output.push_back(n-1);
+            sumInpartition += input[n-1];
+        }
+
+        return true;
     }
     else
     {
-        cout << set[row] << " ";
-        col = col - set[row];
-        row = row-1;
-        printPath(subset, set, row, col);
+        return false;
     }
-}
-
-void findSubSet(vector<int> &set, vector< vector<bool> > &subset, int sum, int n)
-{
-    for(int i=0; i<n; i++)
-        subset[i][0] = true;
-
-    for(int i=0; i<n; i++)
-    {
-        for(int j=1; j<=sum; j++)
-        {
-            if(i == 0)
-            {
-                if(j == set[i])
-                    subset[i][j] = true;
-                else
-                    subset[i][j] = false;
-            }
-            else
-            {
-                if(subset[i-1][j])
-                    subset[i][j] = true;
-                else if(j < set[i])
-                    subset[i][j] = subset[i-1][j];
-                else if(j == set[i])
-                    subset[i][j] = true;
-                else
-                    subset[i][j] = subset[i-1][j-set[i]];
-            }
-        }
-    }
-
-    // print subset
-
-    // for(int i=0; i<=sum; i++)
-    //     cout << i << " ";
-    // cout << endl;
-
-    // for(int i=0; i<n; i++)
-    // {
-    //     for(int j=0; j<=sum; j++)
-    //         cout << subset[i][j] << " ";
-    //     cout << endl;
-    // }
-
-    // cout << endl;
 }
 
 int main()
@@ -80,23 +36,35 @@ int main()
     int n;
     cin >> n;
 
-    vector<int> set(n);
+    vector<int> input(n);
 
     for(int i=0; i<n; i++)
-        cin >> set[i];
+        cin >> input[i];
 
-    int sum;
-    cin >> sum;
+    int sum = 0;
 
-    vector< vector<bool> > subset(n, vector<bool>(sum+1));
-    
-    findSubSet(set, subset, sum, n);
+    for(int i=0; i<n; i++)
+        sum += input[i];
 
-    if(!subset[n-1][sum])
-        cout << "No such subset exists" << endl;
+    if(sum%2)
+        cout << "Given set can't be partitioned in the desired way." << endl;
     else
     {
-        printPath(subset, set, n-1, sum);        
+        vector<int> output;
+        int sumInpartition = 0;
+        bool result = partition(input, output, n, sum/2, sumInpartition);
+        if(result)
+        {
+            cout << "Given set can be partitioned in the desired way." << endl;
+            cout << "partitioned set " << endl;
+
+            for(int i=0; i<output.size(); i++)
+                cout << input[output[i]] << " ";            
+        }
+        else
+        {            
+            cout << "Given set can't be partitioned in the desired way." << endl;                
+        }
     }
 
     return 0;
